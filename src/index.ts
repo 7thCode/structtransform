@@ -21,47 +21,49 @@ export class StructScanner {
         return ((value !== null) && (typeof value === 'object'));
     }
 
-    public Scan(s: any, dict: { path: string[], value: any }[]): boolean {
+    private toPath(value: string[]): any {
+        let result = "";
+        value.forEach((s) => {
+            result += "/" + s;
+        })
+       return result;
+    }
+
+    public Scan(s: any, dict: { path: string, value: any }[]): boolean {
         this.current_path = [];
         return this._Scan(s, dict);
     }
 
-    private _Scan(s: any, dict: { path: string[], value: any }[]): boolean {
+    private _Scan(s: any, dict: { path: string, value: any }[]): boolean {
         let result = true;
         if (StructScanner.isValue(s)) {
             if (StructScanner.isContainer(s)) {
+    //            const is_array = Array.isArray(s);
                 const attrs = Object.keys(s);
                 for (let index = 0; index < attrs.length; index++) {
                     let attr = attrs[index];
                     this.current_path.push(attr);
-                    
-
                     if (this._Scan(s[attr], dict)) {
-                        if (Array.isArray(s)) {
-                            break;
-                        } else {
-                            this.current_path.pop();
-                        }
+            //            if (!is_array) {
+            //                this.current_path.pop();
+            //            }
                     } else {
-                        if (Array.isArray(s)) {
-                            this.current_path.pop();
-                        } else {
-                            break;
-                        }
+           //             break;
+             //           if (!is_array) {
+             //               this.current_path.pop();
+             //               break;
+             //           }
                     }
+                    this.current_path.pop();
                 }
             } else {
-
-
-                console.log(this.current_path + " : " + s);
-
-
-                dict.push({path: this.current_path, value: s});
-
-                this.current_path.pop();
+                dict.push({path: this.toPath(this.current_path), value: s});
+         //       this.current_path.pop();
                 result = false;
             }
         } else {
+            dict.push({path: this.toPath(this.current_path), value: s});
+            this.current_path.pop();
             result = false;
         }
         return result;
