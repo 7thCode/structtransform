@@ -143,7 +143,10 @@ export class StructRenderer extends StructScanner {
     }
 
     public override onValue(current: any, parent: any, attribute: string, path: string, path_dict: any): void {
-        parent[attribute] = "a";
+        const value = path_dict[path];
+        if (value) {
+             parent[attribute] = value;
+        }
     }
 
     public override toPath(value: string[]): any {
@@ -158,21 +161,26 @@ export class StructRenderer extends StructScanner {
 
 export class StructTransformer {
 
-    private output: any = {};
-
     private from_dict: any = {};
     private to_dict: any = {};
 
-    private relation: any = {};
-
     constructor(from: any, to: any) {
-
-        this.output = to;
-
-        const from_scanner = new UniqueKeyScanner();
-        const to_scanner = new ManyKeyScanner();
+        const from_scanner: UniqueKeyScanner = new UniqueKeyScanner();
+        const to_scanner: ManyKeyScanner = new ManyKeyScanner();
         from_scanner.Scan(from, this.from_dict);
         to_scanner.Scan(to, this.to_dict);
+    }
+
+    public Transform(before: any, after: any): boolean {
+        let result: boolean;
+
+        const value_collecter:ValueCollecter = new ValueCollecter();
+        const struct_renderer:StructRenderer = new StructRenderer();
+
+        const relation: any = {};
+        const values: any = {};
+
+        value_collecter.Scan(before, values);
 
         Object.keys(this.from_dict).forEach((key) => {
             const key_string: string = key.toString();
@@ -180,26 +188,12 @@ export class StructTransformer {
             const to: string[] = this.to_dict[key_string];
             if (from && to) {
                 to.forEach((key) => {
-                    this.relation[key] = from;
+                    relation[key] = values[from];
                 })
             }
         });
-    }
 
-    public Transform(before: any): boolean {
-        let result: boolean;
-
-        const value_collecter = new ValueCollecter();
-        const struct_renderer = new StructRenderer();
-
-        const values: any = {};
-        value_collecter.Scan(before, values);
-
-        Object.keys(this.relation).forEach((key) => {
-            this.relation[key] = values[this.relation[key]];
-        })
-
-        struct_renderer.Scan(this.output, this.relation);
+        struct_renderer.Scan(after, relation);
 
         result = true;
         return result;

@@ -87,7 +87,7 @@ describe('StructTransformer', () => {
 
         dict = {};
         many_key_scanner.Scan([{a: 1}, {a: 1}, {c: 1}], dict);
-        expect(dict).toStrictEqual({1: ["/0/a","/1/a","/2/c"]});
+        expect(dict).toStrictEqual({1: ["/0/a", "/1/a", "/2/c"]});
 
         dict = {};
         const x = {a: {}, b: [], c: "", d: 0, e: false, f: null, g: NaN, h: undefined}
@@ -109,7 +109,6 @@ describe('StructTransformer', () => {
 
     it('ValueCollecter', () => {
 
-
         const value_collecter = new ValueCollecter();
         let dict: any = {};
 
@@ -124,31 +123,31 @@ describe('StructTransformer', () => {
         }
 
         value_collecter.Scan(o, dict);
-        expect(dict).toStrictEqual({"/a/a1":"x1", "/b/b1/b11/b111": "x2", "/b/b1/b12/b121/0":"x3", "/b/b1/b12/b121/1":"x4", "/b/b1/b12/b121/2/b1211":"x5" });
+        expect(dict).toStrictEqual({"/a/a1": "x1", "/b/b1/b11/b111": "x2", "/b/b1/b12/b121/0": "x3", "/b/b1/b12/b121/1": "x4", "/b/b1/b12/b121/2/b1211": "x5"});
 
     });
 
     it('StructRenderer', () => {
 
         const struct_renderer = new StructRenderer();
-        let dict: any = {};
+        let dict: any = {"/a/a1": "updated1", "/b/b1/b12/b121/1": "updated4"};
 
         const i = {
-            a: {a1: "x1"},
+            a: {a1: "original1"},
             b: {
                 b1: {
-                    b11: {b111: "x2"},
-                    b12: {b121: ["x3", "x4", {b1211: "x5"}]}
+                    b11: {b111: "original2"},
+                    b12: {b121: ["original3", "original4", {b1211: "original5"}]}
                 }
             }
         }
 
         const o = {
-            a: {a1: "a"},
+            a: {a1: "updated1"},
             b: {
                 b1: {
-                    b11: {b111: "a"},
-                    b12: {b121: ["a", "a", {b1211: "a"}]}
+                    b11: {b111: "original2"},
+                    b12: {b121: ["original3", "updated4", {b1211: "original5"}]}
                 }
             }
         }
@@ -158,7 +157,35 @@ describe('StructTransformer', () => {
     });
 
     it('Transformer', () => {
-        const transformer = new StructTransformer([{a: "key1"}, {b: "key2"}, {c: ["key3", "key4"]}], {x1: "key1", x2: {y1: "key2", y2: "key2", y3: {z1: "key3", z2: "key4"}}});
-        expect(transformer.Transform([{a: "XXXXXX"}, {b: "ZZZZZZZ"}, {c: ["YYYYYYY", "OOOOOOO"]}])).toBe(true);
+
+        const before_template = [{a: "key1"}, {b: "key2"}, {c: ["key3", "key4"]}];
+        const after_template = {x1: "key1", x2: {y1: "key2", y2: "key2", y3: {z1: "key3", z2: "key4"}}};
+
+        const transformer = new StructTransformer(before_template, after_template);
+
+        const data = [{a: "Data1"}, {b: "Data2"}, {c: ["Data3", "Data4"]}]
+        const before = {x1: "dummy", x2: {y1: "dummy", y2: "dummy", y3: {z1: "dummy", z2: "dummy"}}};
+        const after = {x1: "Data1", x2: {y1: "Data2", y2: "Data2", y3: {z1: "Data3", z2: "Data4"}}};
+
+        transformer.Transform(data, before);
+        expect(before).toStrictEqual(after);
+
+        const before_array = [
+            {x1: "dummy", x2: {y1: "dummy", y2: "dummy", y3: {z1: "dummy", z2: "dummy"}}},
+            {x1: "dummy", x2: {y1: "dummy", y2: "dummy", y3: {z1: "dummy", z2: "dummy"}}},
+            {x1: "dummy", x2: {y1: "dummy", y2: "dummy", y3: {z1: "dummy", z2: "dummy"}}},
+            {x1: "dummy", x2: {y1: "dummy", y2: "dummy", y3: {z1: "dummy", z2: "dummy"}}},
+        ];
+
+        const after_array = [
+            {x1: "dummy", x2: {y1: "dummy", y2: "dummy", y3: {z1: "dummy", z2: "dummy"}}},
+            {x1: "dummy", x2: {y1: "dummy", y2: "dummy", y3: {z1: "dummy", z2: "dummy"}}},
+            {x1: "Data1", x2: {y1: "Data2", y2: "Data2", y3: {z1: "Data3", z2: "Data4"}}},
+            {x1: "dummy", x2: {y1: "dummy", y2: "dummy", y3: {z1: "dummy", z2: "dummy"}}},
+        ];
+
+        transformer.Transform(data, before_array[2]);
+        expect(before_array).toStrictEqual(after_array);
+
     });
 });
