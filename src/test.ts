@@ -6,13 +6,13 @@
 
 "use strict";
 
-import {UniqueKeyScanner, ManyKeyScanner, StructRenderer, StructTransformer, ValueCollecter} from "./index";
+import {PathScanner, PathDictBuilder, StructRenderer, StructTransformer, ValueCollecter} from "./index";
 
 describe('StructTransformer', () => {
 
-    it('UniqueKeyScanner', () => {
+    it('PathScanner', () => {
 
-        const unique_scanner = new UniqueKeyScanner();
+        const unique_scanner = new PathScanner();
         let dict: any = {};
 
         const o = {
@@ -58,10 +58,9 @@ describe('StructTransformer', () => {
 
     });
 
-    it('ManyKeyScanner', () => {
+    it('PathDictBuilder', () => {
 
-
-        const many_key_scanner = new ManyKeyScanner();
+        const many_key_scanner = new PathDictBuilder();
         let dict: any = {};
 
         const o = {
@@ -94,7 +93,6 @@ describe('StructTransformer', () => {
 
         many_key_scanner.Scan(x, dict);
         expect(dict).toStrictEqual({0: ["/d"], NaN: ["/g"]});
-
 
         many_key_scanner.Scan({}, []);
         many_key_scanner.Scan([], []);
@@ -158,10 +156,10 @@ describe('StructTransformer', () => {
 
     it('Transformer', () => {
 
-        const before_template = [{a: "key1"}, {b: "key2"}, {c: ["key3", "key4"]}];
-        const after_template = {x1: "key1", x2: {y1: "key2", y2: "key2", y3: {z1: "key3", z2: "key4"}}};
+        const before_template: any = [{a: "key1"}, {b: "key2"}, {c: ["key3", "key4"]}];
+        const after_template: any = {x1: "key1", x2: {y1: "key2", y2: "key2", y3: {z1: "key3", z2: "key4"}}};
 
-        const transformer = new StructTransformer(before_template, after_template);
+        const transformer: StructTransformer = new StructTransformer(before_template, after_template);
 
         const data = [{a: "Data1"}, {b: "Data2"}, {c: ["Data3", "Data4"]}]
         const before = {x1: "dummy", x2: {y1: "dummy", y2: "dummy", y3: {z1: "dummy", z2: "dummy"}}};

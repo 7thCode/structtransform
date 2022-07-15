@@ -45,7 +45,7 @@ export abstract class StructScanner {
     }
 }
 
-export class UniqueKeyScanner extends StructScanner {
+export class PathScanner extends StructScanner {
 
     constructor() {
         super()
@@ -74,7 +74,7 @@ export class UniqueKeyScanner extends StructScanner {
     }
 }
 
-export class ManyKeyScanner extends StructScanner {
+export class PathDictBuilder extends StructScanner {
 
     constructor() {
         super()
@@ -165,8 +165,8 @@ export class StructTransformer {
     private to_dict: any = {};
 
     constructor(from: any, to: any) {
-        const from_scanner: UniqueKeyScanner = new UniqueKeyScanner();
-        const to_scanner: ManyKeyScanner = new ManyKeyScanner();
+        const from_scanner: PathScanner = new PathScanner();
+        const to_scanner: PathDictBuilder = new PathDictBuilder();
         from_scanner.Scan(from, this.from_dict);
         to_scanner.Scan(to, this.to_dict);
     }
