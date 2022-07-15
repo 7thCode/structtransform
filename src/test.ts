@@ -6,7 +6,7 @@
 
 "use strict";
 
-import {UniqueKeyScanner, ManyKeyScanner, StructRenderer1, StructTransformer} from "./index";
+import {UniqueKeyScanner, ManyKeyScanner, StructRenderer, StructTransformer, ValueCollecter} from "./index";
 
 describe('StructTransformer', () => {
 
@@ -107,9 +107,30 @@ describe('StructTransformer', () => {
 
     });
 
+    it('ValueCollecter', () => {
+
+
+        const value_collecter = new ValueCollecter();
+        let dict: any = {};
+
+        const o = {
+            a: {a1: "x1"},
+            b: {
+                b1: {
+                    b11: {b111: "x2"},
+                    b12: {b121: ["x3", "x4", {b1211: "x5"}]}
+                }
+            }
+        }
+
+        value_collecter.Scan(o, dict);
+        expect(dict).toStrictEqual({"/a/a1":"x1", "/b/b1/b11/b111": "x2", "/b/b1/b12/b121/0":"x3", "/b/b1/b12/b121/1":"x4", "/b/b1/b12/b121/2/b1211":"x5" });
+
+    });
+
     it('StructRenderer', () => {
 
-        const struct_renderer = new StructRenderer1();
+        const struct_renderer = new StructRenderer();
         let dict: any = {};
 
         const i = {
@@ -132,7 +153,7 @@ describe('StructTransformer', () => {
             }
         }
 
-        struct_renderer.Render(i, dict);
+        struct_renderer.Scan(i, dict);
         expect(i).toStrictEqual(o);
 
 
