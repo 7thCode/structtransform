@@ -21,7 +21,7 @@ export abstract class StructScanner {
         return ((value !== null) && (typeof value === 'object'));
     }
 
-    abstract onValue(parent: any, attribute: string, path: string, path_dict: any): void
+    abstract onValue(container: any, attribute: string, path: string, path_dict: any): void
 
     abstract toPath(value: string[]): any
 
@@ -51,8 +51,8 @@ export class PathScanner extends StructScanner {
         super()
     }
 
-    public override onValue(parent: any, attribute: string, path: string, path_dict: any): void {
-        const current = parent[attribute];
+    public override onValue(container: any, attribute: string, path: string, path_dict: any): void {
+        const current = container[attribute];
         switch (current) { // filter special types.
             case "":
             case false:
@@ -81,8 +81,8 @@ export class PathDictBuilder extends StructScanner {
         super()
     }
 
-    public override onValue(parent: any, attribute: string, path: string, path_dict: any): void {
-        const current = parent[attribute];
+    public override onValue(container: any, attribute: string, path: string, path_dict: any): void {
+        const current = container[attribute];
         switch (current) { // filter special types.
             case "":
             case false:
@@ -115,8 +115,8 @@ export class ValueCollecter extends StructScanner {
         super()
     }
 
-    public override onValue(parent: any, attribute: string, path: string, path_dict: any): void {
-        const current = parent[attribute];
+    public override onValue(container: any, attribute: string, path: string, path_dict: any): void {
+        const current = container[attribute];
         switch (current) { // filter special types.
             case "":
             case false:
@@ -145,10 +145,10 @@ export class StructRenderer extends StructScanner {
         super()
     }
 
-    public override onValue(parent: any, attribute: string, path: string, path_dict: any): void {
+    public override onValue(container: any, attribute: string, path: string, path_dict: any): void {
         const value = path_dict[path];
         if (value) {
-            parent[attribute] = value;
+            container[attribute] = value;
         }
     }
 

@@ -46,7 +46,6 @@ describe('StructTransformer', () => {
         unique_scanner.Scan(x, dict);
         expect(dict).toStrictEqual({0: "/d", NaN: "/g"});
 
-
         unique_scanner.Scan({}, []);
         unique_scanner.Scan([], []);
         unique_scanner.Scan("", []);
@@ -55,7 +54,6 @@ describe('StructTransformer', () => {
         unique_scanner.Scan(null, []);
         unique_scanner.Scan(NaN, []);
         unique_scanner.Scan(undefined, []);
-
     });
 
     it('PathDictBuilder', () => {
@@ -102,7 +100,6 @@ describe('StructTransformer', () => {
         many_key_scanner.Scan(null, []);
         many_key_scanner.Scan(NaN, []);
         many_key_scanner.Scan(undefined, []);
-
     });
 
     it('ValueCollecter', () => {
@@ -123,6 +120,14 @@ describe('StructTransformer', () => {
         value_collecter.Scan(o, dict);
         expect(dict).toStrictEqual({"/a/a1": "x1", "/b/b1/b11/b111": "x2", "/b/b1/b12/b121/0": "x3", "/b/b1/b12/b121/1": "x4", "/b/b1/b12/b121/2/b1211": "x5"});
 
+        value_collecter.Scan({}, []);
+        value_collecter.Scan([], []);
+        value_collecter.Scan("", []);
+        value_collecter.Scan(0, []);
+        value_collecter.Scan(false, []);
+        value_collecter.Scan(null, []);
+        value_collecter.Scan(NaN, []);
+        value_collecter.Scan(undefined, []);
     });
 
     it('StructRenderer', () => {
@@ -152,6 +157,15 @@ describe('StructTransformer', () => {
 
         struct_renderer.Scan(i, dict);
         expect(i).toStrictEqual(o);
+
+        struct_renderer.Scan({}, []);
+        struct_renderer.Scan([], []);
+        struct_renderer.Scan("", []);
+        struct_renderer.Scan(0, []);
+        struct_renderer.Scan(false, []);
+        struct_renderer.Scan(null, []);
+        struct_renderer.Scan(NaN, []);
+        struct_renderer.Scan(undefined, []);
     });
 
     it('Transformer', () => {
