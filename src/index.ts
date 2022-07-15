@@ -6,66 +6,162 @@
 
 "use strict";
 
-export class StructScanner {
+export abstract class StructScanner {
 
     private current_path: string[] = [];
 
     constructor() {
     }
 
-    private static isValue(value: unknown): boolean {
+    protected static isValue(value: unknown): boolean {
         return ((value !== null) && (typeof value !== 'undefined'));
     }
 
-    private static isContainer(value: unknown): boolean {
+    protected static isContainer(value: unknown): boolean {
         return ((value !== null) && (typeof value === 'object'));
     }
 
-    private toPath(value: string[]): any {
+    abstract onValue(key: any, path: any, path_dict: any): void
+
+    abstract toPath(value: string[]): any
+
+    public Scan(s: any, path_dict: any): void {
+        this.current_path = [];
+        this._Scan(s, path_dict);
+    }
+
+    protected _Scan(s: any, path_dict: any): void {
+        if (StructScanner.isValue(s)) {
+            if (StructScanner.isContainer(s)) {
+                Object.keys(s).forEach((attr) => {
+                    this.current_path.push(attr);
+                    this._Scan(s[attr], path_dict);
+                    this.current_path.pop();
+                });
+            } else {
+                this.onValue(s, this.toPath(this.current_path), path_dict);
+            }
+        }
+    }
+}
+
+export class UniqueKeyScanner extends StructScanner {
+
+    constructor() {
+        super()
+    }
+
+    public override onValue(key: any, path: any, path_dict: any): void {
+        switch (key) { // filter special types.
+            case "":
+            case false:
+            case null:
+            case undefined:
+                break;
+            default:
+                const key_string: string = key.toString();
+                path_dict[key_string] = path;
+                break;
+        }
+    }
+
+    public override toPath(value: string[]): any {
         let result = "";
         value.forEach((s) => {
             result += "/" + s;
         })
-       return result;
+        return result;
+    }
+}
+
+export class ManyKeyScanner extends StructScanner {
+
+    constructor() {
+        super()
     }
 
-    public Scan(s: any, dict: { path: string, value: any }[]): boolean {
-        this.current_path = [];
-        return this._Scan(s, dict);
-    }
-
-    private _Scan(s: any, dict: { path: string, value: any }[]): boolean {
-        let result = true;
-        if (StructScanner.isValue(s)) {
-            if (StructScanner.isContainer(s)) {
-    //            const is_array = Array.isArray(s);
-                const attrs = Object.keys(s);
-                for (let index = 0; index < attrs.length; index++) {
-                    let attr = attrs[index];
-                    this.current_path.push(attr);
-                    if (this._Scan(s[attr], dict)) {
-            //            if (!is_array) {
-            //                this.current_path.pop();
-            //            }
-                    } else {
-           //             break;
-             //           if (!is_array) {
-             //               this.current_path.pop();
-             //               break;
-             //           }
-                    }
-                    this.current_path.pop();
+    public override onValue(key: any, path: any, path_dict: any): void {
+        switch (key) { // filter special types.
+            case "":
+            case false:
+            case null:
+            case undefined:
+                break;
+            default:
+                const key_string: string = key.toString();
+                if (!(key_string in path_dict)) {
+                    path_dict[key_string] = [];
                 }
-            } else {
-                dict.push({path: this.toPath(this.current_path), value: s});
-         //       this.current_path.pop();
-                result = false;
-            }
-        } else {
-            dict.push({path: this.toPath(this.current_path), value: s});
-            this.current_path.pop();
-            result = false;
+                path_dict[key_string].push(path);
+                break;
         }
+    }
+
+    public override toPath(value: string[]): any {
+        let result = "";
+        value.forEach((s) => {
+            result += "/" + s;
+        })
+        return result;
+    }
+
+}
+
+export abstract class StructRenderer {
+
+    private current_path: string[] = [];
+
+    constructor() {
+    }
+
+    protected static isValue(value: unknown): boolean {
+        return ((value !== null) && (typeof value !== 'undefined'));
+    }
+
+    protected static isContainer(value: unknown): boolean {
+        return ((value !== null) && (typeof value === 'object'));
+    }
+
+    abstract onValue(current: any, parent: any, attribute: any, path: any, path_dict: any): void
+
+    abstract toPath(value: string[]): any
+
+    public Render(s: any, path_dict: any): void {
+        this.current_path = [];
+        this._Render(s, {}, "", path_dict);
+    }
+
+    protected _Render(current: any, parent: any, attribute: any, path_dict: any): void {
+        if (StructRenderer.isValue(current)) {
+            if (StructRenderer.isContainer(current)) {
+                Object.keys(current).forEach((attr) => {
+                    this.current_path.push(attr);
+                    this._Render(current[attr], current, attr, path_dict);
+                    this.current_path.pop();
+                });
+            } else {
+                this.onValue(current, parent, attribute, this.toPath(this.current_path), path_dict);
+            }
+        }
+    }
+}
+
+
+export class StructRenderer1 extends StructRenderer {
+
+    constructor() {
+        super()
+    }
+
+    public override onValue(current: any, parent: any, attribute: any, path: any, path_dict: any): void {
+        parent[attribute] = "a";
+    }
+
+    public override toPath(value: string[]): any {
+        let result = "";
+        value.forEach((s) => {
+            result += "/" + s;
+        })
         return result;
     }
 
@@ -73,15 +169,28 @@ export class StructScanner {
 
 export class StructTransformer {
 
-    private from: any = null;
-    private to: any = null;
+    private from_dict: any = {};
+    private to_dict: any = {};
+
+    private relation: any = {};
 
     constructor(from: any, to: any) {
 
-        const scanner = new StructScanner();
+        const from_scanner = new UniqueKeyScanner();
+        const to_scanner = new ManyKeyScanner();
+        from_scanner.Scan(from, this.from_dict);
+        to_scanner.Scan(to, this.to_dict);
 
-        this.from = from;
-        this.to = to;
+        Object.keys(this.from_dict).forEach((key) => {
+            const key_string: string = key.toString();
+            const from: string = this.from_dict[key_string];
+            const to: string[] = this.to_dict[key_string];
+            if (from && to) {
+                this.relation[from] = to;
+            }
+        });
+
+        console.log(this.relation)
     }
 
     public Transform(before: any): boolean {
