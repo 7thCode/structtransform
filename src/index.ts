@@ -21,7 +21,7 @@ export abstract class StructScanner {
         return ((value !== null) && (typeof value === 'object'));
     }
 
-    abstract onValue(current: any, parent: any, attribute: string, path: string, path_dict: any): void
+    abstract onValue(parent: any, attribute: string, path: string, path_dict: any): void
 
     abstract toPath(value: string[]): any
 
@@ -39,7 +39,7 @@ export abstract class StructScanner {
                     this.current_path.pop();
                 });
             } else {
-                this.onValue(current, parent, attribute, this.toPath(this.current_path), path_dict);
+                this.onValue(parent, attribute, this.toPath(this.current_path), path_dict);
             }
         }
     }
@@ -51,7 +51,8 @@ export class PathScanner extends StructScanner {
         super()
     }
 
-    public override onValue(current: any, parent: any, attribute: string, path: string, path_dict: any): void {
+    public override onValue(parent: any, attribute: string, path: string, path_dict: any): void {
+        const current = parent[attribute];
         switch (current) { // filter special types.
             case "":
             case false:
@@ -80,7 +81,8 @@ export class PathDictBuilder extends StructScanner {
         super()
     }
 
-    public override onValue(current: any, parent: any, attribute: string, path: string, path_dict: any): void {
+    public override onValue(parent: any, attribute: string, path: string, path_dict: any): void {
+        const current = parent[attribute];
         switch (current) { // filter special types.
             case "":
             case false:
@@ -113,7 +115,8 @@ export class ValueCollecter extends StructScanner {
         super()
     }
 
-    public override onValue(current: any, parent: any, attribute: string, path: string, path_dict: any): void {
+    public override onValue(parent: any, attribute: string, path: string, path_dict: any): void {
+        const current = parent[attribute];
         switch (current) { // filter special types.
             case "":
             case false:
@@ -142,10 +145,10 @@ export class StructRenderer extends StructScanner {
         super()
     }
 
-    public override onValue(current: any, parent: any, attribute: string, path: string, path_dict: any): void {
+    public override onValue(parent: any, attribute: string, path: string, path_dict: any): void {
         const value = path_dict[path];
         if (value) {
-             parent[attribute] = value;
+            parent[attribute] = value;
         }
     }
 
@@ -174,8 +177,8 @@ export class StructTransformer {
     public Transform(before: any, after: any): boolean {
         let result: boolean;
 
-        const value_collecter:ValueCollecter = new ValueCollecter();
-        const struct_renderer:StructRenderer = new StructRenderer();
+        const value_collecter: ValueCollecter = new ValueCollecter();
+        const struct_renderer: StructRenderer = new StructRenderer();
 
         const relation: any = {};
         const values: any = {};
