@@ -1,7 +1,7 @@
 {
-  "name": "structdiff",
-  "version": "0.1.2",
-  "description": "testing object structure difference.",
+  "name": "structtransform",
+  "version": "0.0.1",
+  "description": "Use a template to change the value of an object.",
   "main": "dist/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -15,12 +15,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:7thCode/structdiff.git"
+    "url": "git@github.com:7thCode/structtransform.git"
   },
   "keywords": [
     "object",
     "structure",
-    "difference"
+    "template",
+    "update"
   ],
   "author": "7thCode",
   "license": "MIT",
