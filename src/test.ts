@@ -155,15 +155,10 @@ describe('StructTransformer', () => {
 
         struct_renderer.Scan(i, dict);
         expect(i).toStrictEqual(o);
-
-
     });
-
-
-
 
     it('Transformer', () => {
         const transformer = new StructTransformer([{a: "key1"}, {b: "key2"}, {c: ["key3", "key4"]}], {x1: "key1", x2: {y1: "key2", y2: "key2", y3: {z1: "key3", z2: "key4"}}});
-        expect(transformer.Transform({})).toBe(true);
+        expect(transformer.Transform([{a: "XXXXXX"}, {b: "ZZZZZZZ"}, {c: ["YYYYYYY", "OOOOOOO"]}])).toBe(true);
     });
 });

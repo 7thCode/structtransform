@@ -158,12 +158,16 @@ export class StructRenderer extends StructScanner {
 
 export class StructTransformer {
 
+    private output: any = {};
+
     private from_dict: any = {};
     private to_dict: any = {};
 
     private relation: any = {};
 
     constructor(from: any, to: any) {
+
+        this.output = to;
 
         const from_scanner = new UniqueKeyScanner();
         const to_scanner = new ManyKeyScanner();
@@ -175,13 +179,11 @@ export class StructTransformer {
             const from: string = this.from_dict[key_string];
             const to: string[] = this.to_dict[key_string];
             if (from && to) {
-                this.relation[from] = to;
+                to.forEach((key) => {
+                    this.relation[key] = from;
+                })
             }
         });
-
-        console.log(this.relation)
-
-
     }
 
     public Transform(before: any): boolean {
@@ -190,10 +192,14 @@ export class StructTransformer {
         const value_collecter = new ValueCollecter();
         const struct_renderer = new StructRenderer();
 
-        const values = {};
+        const values: any = {};
         value_collecter.Scan(before, values);
 
- //       struct_renderer.Scan(i, this.relation);
+        Object.keys(this.relation).forEach((key) => {
+            this.relation[key] = values[this.relation[key]];
+        })
+
+        struct_renderer.Scan(this.output, this.relation);
 
         result = true;
         return result;
