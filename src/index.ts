@@ -174,8 +174,7 @@ export class StructTransformer {
         to_scanner.Scan(to, this.to_dict);
     }
 
-    public Transform(before: any, after: any): boolean {
-        let result: boolean;
+    public Transform(before: any, after: any): void {
 
         const value_collecter: ValueCollecter = new ValueCollecter();
         const struct_renderer: StructRenderer = new StructRenderer();
@@ -197,9 +196,6 @@ export class StructTransformer {
         });
 
         struct_renderer.Scan(after, relation);
-
-        result = true;
-        return result;
     }
 
 }
