@@ -6,6 +6,7 @@
 
 # structtransform
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+![node.js.yml](https://github.com/7thCode/structdiff/actions/workflows/node.js.yml/badge.svg)
 
 Use a template to change the value of an object.
 
