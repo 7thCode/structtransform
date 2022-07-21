@@ -1,14 +1,16 @@
-| index | [DEMO] | [in detail] |
-|-------|--------|----|
+| [README] | [DEMO] | [in detail] |
+|----------|--------|-------------|
 
-[DEMO]: docs/demo.md
-[in detail]: docs/detail.md
+# StructTransform
 
-# structtransform
+[![npm version](https://badge.fury.io/js/structtransform.svg)](https://badge.fury.io/js/structtransform)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-![node.js.yml](https://github.com/7thCode/structdiff/actions/workflows/node.js.yml/badge.svg)
+[![7thCode](https://circleci.com/gh/7thCode/structtransform.svg?style=shield)]()
+![node.js.yml](https://github.com/7thCode/structtransform/actions/workflows/node.js.yml/badge.svg)
 
 Use a template to change the value of an object.
+
+# Motivation
 
 # Features
 
@@ -255,3 +257,6 @@ console.log(target_and_result);
 # License
 "structtransform" is under [MIT license](https://en.wikipedia.org/wiki/MIT_License).
 
+[README]: README.md
+[DEMO]: docs/demo.md
+[in detail]: docs/detail.md
