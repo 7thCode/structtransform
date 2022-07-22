@@ -1,12 +1,13 @@
 | [README] | [DEMO] | [in detail] |
 |----------|--------|-------------|
 
-# StructTransform
-
 [![npm version](https://badge.fury.io/js/structtransform.svg)](https://badge.fury.io/js/structtransform)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+![npm type definitions](https://img.shields.io/npm/types/structtransform)
+![GitHub](https://img.shields.io/github/license/7thcode/structtransform)
 [![7thCode](https://circleci.com/gh/7thCode/structtransform.svg?style=shield)]()
 ![node.js.yml](https://github.com/7thCode/structtransform/actions/workflows/node.js.yml/badge.svg)
+![GitHub last commit](https://img.shields.io/github/last-commit/7thcode/structtransform)
+# StructTransform
 
 Use a template to change the value of an object.
 
