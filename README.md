@@ -1,6 +1,6 @@
-<div style="text-align: center;">
+<div align="center">
 
-<div style="font-size: 30px; font-weight:900">StructTransform</div>
+<h1>StructTransform</h1>
 
 Use a template to change the value of an object.
 
