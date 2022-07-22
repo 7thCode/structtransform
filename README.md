@@ -1,21 +1,33 @@
-| [README] | [DEMO] | [in detail] |
-|----------|--------|-------------|
+<div style="text-align: center;">
 
+<div style="font-size: 30px; font-weight:900">StructTransform</div>
+
+Use a template to change the value of an object.
+
+![GitHub package.json version](https://img.shields.io/github/package-json/v/7thcode/structtransform?color=deepgreen)
 [![npm version](https://badge.fury.io/js/structtransform.svg)](https://badge.fury.io/js/structtransform)
 ![npm type definitions](https://img.shields.io/npm/types/structtransform)
 ![GitHub](https://img.shields.io/github/license/7thcode/structtransform)
 [![7thCode](https://circleci.com/gh/7thCode/structtransform.svg?style=shield)]()
 ![node.js.yml](https://github.com/7thCode/structtransform/actions/workflows/node.js.yml/badge.svg)
 ![GitHub last commit](https://img.shields.io/github/last-commit/7thcode/structtransform)
-# StructTransform
 
-Use a template to change the value of an object.
+ [README]　[DEMO]　[in detail]
 
+</div>
+
+***
 # Motivation
+
+Writing now.
 
 # Features
 
+Writing now.
+
 # Requirement
+
+Writing now.
 
 # Installation
 ```bash
@@ -24,6 +36,7 @@ npm install structtransform
 
 # Usage
 
+Writing now.
 
 ## StructTransformer
 
