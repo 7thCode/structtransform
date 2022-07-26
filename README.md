@@ -18,28 +18,16 @@ Use a template to change the value of an object.
 
 ***
 # Motivation
-
-Writing now.
-
+I have to migrate... Do you change the shape of so many objects?
 # Features
-
-Writing now.
-
-# Requirement
-
-Writing now.
-
+Transform an object using two templates, pre-transform and post-transform.
+The two templates are a mechanism to recognize each other's location by "key".
 # Installation
 ```bash
 npm install structtransform
 ```
-
 # Usage
-
-Writing now.
-
 ## StructTransformer
-
 #### Transform the structure.
 
 First, the object before transformation is defined as the original template.
@@ -263,11 +251,10 @@ console.log(target_and_result);
     }
 }
 ```
-
 # Note
-
+See demo.md for unclear cases.
 # Author
-
+info@seventh-code.com
 # License
 "structtransform" is under [MIT license](https://en.wikipedia.org/wiki/MIT_License).
 
