@@ -1,6 +1,6 @@
 {
   "name": "structtransform",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Use a template to change the value of an object.",
   "main": "dist/index.js",
   "module": "dist/esm/index.js",
