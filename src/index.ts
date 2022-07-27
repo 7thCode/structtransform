@@ -176,13 +176,13 @@ export class StructTransformer {
 
     public Transform(before: any, after: any): void {
 
-        const value_collecter: ValueCollecter = new ValueCollecter();
+        const value_collector: ValueCollecter = new ValueCollecter();
         const struct_renderer: StructRenderer = new StructRenderer();
 
         const relation: any = {};
         const values: any = {};
 
-        value_collecter.Scan(before, values);
+        value_collector.Scan(before, values);
 
         Object.keys(this.from_dict).forEach((key) => {
             const key_string: string = key.toString();
