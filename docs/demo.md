@@ -1,5 +1,4 @@
-| [README] | [DEMO] | [in detail] |
-|----------|--------|-------------|
+ [README]　[DEMO]　[in detail]
 
 ```ts
 describe('StructTransformer', () => {
