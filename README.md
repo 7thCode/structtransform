@@ -36,6 +36,10 @@ Next, an object representing the transformed structure is prepared as a post-pro
 
 By applying inset_data that holds the data to the target data, the value of the target data is converted from the original template to the structure of the post-process template using the value as a key.
 
+Replace the structure of the from template with the structure of the to template.
+The from and to templates apply the same values to the same key locations.
+Note that the value must be of built-in type.
+
 #### Example
 
 ```ts
@@ -45,7 +49,7 @@ const post_processing_template: any = {x1: "Key1", x2: {y1: "Key2", y2: "Key2", 
 const transformer: StructTransformer = new StructTransformer(before_template, after_template);
 
 const inset_data = [{a: "Data1"}, {b: "Data2"}, {c: ["Data3", "Data4"]}]
-const target_and_result = {x1: "Original1", x2: {y1: "Original2", y2: "Original3", y3: {z1: "Original4", z2: "Original5"}}};
+const target_and_result = {x1: "", x2: {y1: "", y2: "", y3: {z1: "", z2: ""}}};
 
 transformer.Transform(inset_data, target_and_result);
 ```
@@ -69,14 +73,16 @@ The target object may be part of the object.
 const original_template: any = [{a: "Key1"}, {b: "Key2"}, {c: ["Key3", "Key4"]}];
 const post_processing_template: any = {x1: "Key1", x2: {y1: "Key2", y2: "Key2", y3: {z1: "Key3", z2: "Key4"}}};
 
+
+// works equally well for container elements.
 const transformer: StructTransformer = new StructTransformer(before_template, after_template);
 
 const inset_data = [{a: "Data1"}, {b: "Data2"}, {c: ["Data3", "Data4"]}]
 const target_and_result = [
-    {x1: "Original1", x2: {y1: "Original2", y2: "Original3", y3: {z1: "Original4", z2: "Original5"}}},
-    {x1: "Original1", x2: {y1: "Original2", y2: "Original3", y3: {z1: "Original4", z2: "Original5"}}},
-    {x1: "Original1", x2: {y1: "Original2", y2: "Original3", y3: {z1: "Original4", z2: "Original5"}}},
-    {x1: "Original1", x2: {y1: "Original2", y2: "Original3", y3: {z1: "Original4", z2: "Original5"}}},
+    {x1: "", x2: {y1: "", y2: "", y3: {z1: "", z2: ""}}},
+    {x1: "", x2: {y1: "", y2: "", y3: {z1: "", z2: ""}}},
+    {x1: "", x2: {y1: "", y2: "", y3: {z1: "", z2: ""}}},
+    {x1: "", x2: {y1: "", y2: "", y3: {z1: "", z2: ""}}},
 ];
 
 transformer.Transform(inset_data, target_and_result[2]);
@@ -88,10 +94,10 @@ console.log(target_and_result);
 
 ```
 [
-    {x1: 'Original1',x2: {y1: 'Original2', y2: 'Original3', y3: [Object]}},
-    {x1: 'Original1',x2: {y1: 'Original2', y2: 'Original3', y3: [Object]}},
-    {x1: 'Data1', x2: {y1: 'Data2', y2: 'Data2', y3: [Object]}},
-    {x1: 'Original1',x2: {y1: 'Original2', y2: 'Original3', y3: [Object]}}
+    {x1: '',x2: {y1: '', y2: '', y3: {z1: "", z2: ""}}},
+    {x1: '',x2: {y1: '', y2: '', y3: {z1: "", z2: ""}}},
+    {x1: 'Data1', x2: {y1: 'Data2', y2: 'Data2', y3: {z1: "Data3", z2: "Data4"}}},
+    {x1: '',x2: {y1: '', y2: '', y3: {z1: "", z2: ""}}}
 ]
 ```
 

@@ -73,7 +73,7 @@ describe('StructTransformer', () => {
         }
 
         many_key_scanner.Scan(target, result);
-        expect(result).toStrictEqual({Duplicate1: ["/a/a1","/b/b1/b11/b111","/b/b1/b12/b121/2/b1211"], Duplicate2: ["/b/b1/b12/b121/0","/b/b1/b12/b121/1"]});
+        expect(result).toStrictEqual({Duplicate1: ["/a/a1", "/b/b1/b11/b111", "/b/b1/b12/b121/2/b1211"], Duplicate2: ["/b/b1/b12/b121/0", "/b/b1/b12/b121/1"]});
 
         result = {};
         many_key_scanner.Scan([1, 2, 3], result);
@@ -161,36 +161,39 @@ describe('StructTransformer', () => {
 
     it('Transformer', () => {
 
-        const before_template: any = [{a: "Key1"}, {b: "Key2"}, {c: ["Key3", "Key4"]}];
-        const after_template: any = {x1: "Key1", x2: {y1: "Key2", y2: "Key2", y3: {z1: "Key3", z2: "Key4"}}};
+        //　Replace the structure of the from template with the structure of the to template.
+        // The from and to templates apply the same values to the same key locations.
+        //　Note that the value must be of built-in type.
+        const from_template: any = [{a: "Key1"}, {b: "Key2"}, {c: ["Key3", "Key4"]}];
+        const to_template: any = {x1: "Key1", x2: {y1: "Key2", y2: "Key2", y3: {z1: "Key3", z2: "Key4"}}};
 
-        const transformer: StructTransformer = new StructTransformer(before_template, after_template);
+        const transformer: StructTransformer = new StructTransformer(from_template, to_template);
 
-        const data = [{a: "Data1"}, {b: "Data2"}, {c: ["Data3", "Data4"]}]
-        const before = {x1: "Original1", x2: {y1: "Original2", y2: "Original3", y3: {z1: "Original4", z2: "Original5"}}};
+        const from = [{a: "Data1"}, {b: "Data2"}, {c: ["Data3", "Data4"]}]
+        const to = {x1: "", x2: {y1: "", y2: "", y3: {z1: "", z2: ""}}};
 
-        transformer.Transform(data, before);
+        transformer.Transform(from, to);
 
-        const after = {x1: "Data1", x2: {y1: "Data2", y2: "Data2", y3: {z1: "Data3", z2: "Data4"}}};
+        const correct = {x1: "Data1", x2: {y1: "Data2", y2: "Data2", y3: {z1: "Data3", z2: "Data4"}}};
 
-        expect(before).toStrictEqual(after);
+        expect(to).toStrictEqual(correct);
 
-        const before_array = [
-            {x1: "Original1", x2: {y1: "Original2", y2: "Original3", y3: {z1: "Original4", z2: "Original5"}}},
-            {x1: "Original1", x2: {y1: "Original2", y2: "Original3", y3: {z1: "Original4", z2: "Original5"}}},
-            {x1: "Original1", x2: {y1: "Original2", y2: "Original3", y3: {z1: "Original4", z2: "Original5"}}},
-            {x1: "Original1", x2: {y1: "Original2", y2: "Original3", y3: {z1: "Original4", z2: "Original5"}}},
+        const to_array = [
+            {x1: "", x2: {y1: "", y2: "", y3: {z1: "", z2: ""}}},
+            {x1: "", x2: {y1: "", y2: "", y3: {z1: "", z2: ""}}},
+            {x1: 1, x2: {y1: true, y2: "any string", y3: {z1: 0, z2: ""}}},
+            {x1: "", x2: {y1: "", y2: "", y3: {z1: "", z2: ""}}},
         ];
 
-        const after_array = [
-            {x1: "Original1", x2: {y1: "Original2", y2: "Original3", y3: {z1: "Original4", z2: "Original5"}}},
-            {x1: "Original1", x2: {y1: "Original2", y2: "Original3", y3: {z1: "Original4", z2: "Original5"}}},
+        const correct_array = [
+            {x1: "", x2: {y1: "", y2: "", y3: {z1: "", z2: ""}}},
+            {x1: "", x2: {y1: "", y2: "", y3: {z1: "", z2: ""}}},
             {x1: "Data1", x2: {y1: "Data2", y2: "Data2", y3: {z1: "Data3", z2: "Data4"}}},
-            {x1: "Original1", x2: {y1: "Original2", y2: "Original3", y3: {z1: "Original4", z2: "Original5"}}},
+            {x1: "", x2: {y1: "", y2: "", y3: {z1: "", z2: ""}}},
         ];
 
-        transformer.Transform(data, before_array[2]);
-        expect(before_array).toStrictEqual(after_array);
+        transformer.Transform(from, to_array[2]);
+        expect(to_array).toStrictEqual(correct_array);
 
     });
 });
