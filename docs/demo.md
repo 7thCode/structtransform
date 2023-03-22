@@ -1,6 +1,6 @@
  [README]　[DEMO]　[in detail]
 
-```ts
+```js
 describe('StructTransformer', () => {
 
     it('PathScanner', () => {

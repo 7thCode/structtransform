@@ -26,6 +26,7 @@ The two templates are a mechanism to recognize each other's location by "key".
 ```bash
 npm install structtransform
 ```
+No modules depend on it.
 # Usage
 ## StructTransformer
 #### Transform the structure.
@@ -42,7 +43,7 @@ Note that the value must be of built-in type.
 
 #### Example
 
-```ts
+```js
 const original_template: any = [{a: "Key1"}, {b: "Key2"}, {c: ["Key3", "Key4"]}];
 const post_processing_template: any = {x1: "Key1", x2: {y1: "Key2", y2: "Key2", y3: {z1: "Key3", z2: "Key4"}}};
 
@@ -54,7 +55,7 @@ const target_and_result = {x1: "", x2: {y1: "", y2: "", y3: {z1: "", z2: ""}}};
 transformer.Transform(inset_data, target_and_result);
 ```
 
-```ts
+```js
 console.log(target_and_result);
 ```
 
@@ -69,7 +70,7 @@ The target object may be part of the object.
 
 #### Example
 
-```ts
+```js
 const original_template: any = [{a: "Key1"}, {b: "Key2"}, {c: ["Key3", "Key4"]}];
 const post_processing_template: any = {x1: "Key1", x2: {y1: "Key2", y2: "Key2", y3: {z1: "Key3", z2: "Key4"}}};
 
@@ -88,7 +89,7 @@ const target_and_result = [
 transformer.Transform(inset_data, target_and_result[2]);
 ```
 
-```ts
+```js
 console.log(target_and_result);
 ```
 
@@ -113,7 +114,7 @@ Returns an enumeration of all object paths keyed by a value. If the same value i
 
 #### Example
 
-```ts
+```js
 const unique_scanner = new PathScanner();
 let result: any = {};
 
@@ -130,7 +131,7 @@ const target = {
 unique_scanner.Scan(target, result);
 ```
 
-```ts
+```js
 console.log(result);
 ```
 
@@ -150,7 +151,7 @@ Returns an enumeration of all object paths keyed by a value. If the same value i
 
 #### Example
 
-```ts
+```js
 const many_key_scanner = new PathDictBuilder();
 let result: any = {};
 
@@ -168,7 +169,7 @@ many_key_scanner.Scan(target, result);
 expect(result).toStrictEqual({Duplicate1: ["/a/a1", "/b/b1/b11/b111", "/b/b1/b12/b121/2/b1211"], Duplicate2: ["/b/b1/b12/b121/0", "/b/b1/b12/b121/1"]});
 ```
 
-```ts
+```js
 console.log(result);
 ```
 
@@ -185,7 +186,7 @@ Returns an object whose key is a path and whose value is the value of that path.
 
 #### Example
 
-```ts
+```js
 
 const value_collecter = new ValueCollecter();
 let result: any = {};
@@ -204,7 +205,7 @@ value_collecter.Scan(target, result);
 expect(result).toStrictEqual({"/a/a1": "Value1", "/b/b1/b11/b111": "Value2", "/b/b1/b12/b121/0": "Value3", "/b/b1/b12/b121/1": "Value4", "/b/b1/b12/b121/2/b1211": "Value5"});
 ```
 
-```ts
+```js
 console.log(result);
 ```
 
@@ -224,7 +225,7 @@ Change the value of the target path of the target object by using [Object whose 
 
 #### Example
 
-```ts
+```js
 
 const struct_renderer = new StructRenderer();
 let dictionary: any = {"/a/a1": "Updated1", "/b/b1/b12/b121/1": "Updated4"};
@@ -242,7 +243,7 @@ const target_and_result = {
 struct_renderer.Scan(target_and_result, dictionary);
 ```
 
-```ts
+```js
 console.log(target_and_result);
 ```
 
